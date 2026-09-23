@@ -11,9 +11,14 @@ test("teacher creates and publishes a quiz that a student can see",async({browse
   await expect(tp.getByText("Teacher",{exact:true})).toBeVisible();
 
   const title="E2E Published Quiz";
+  const classSelect=tp.getByLabel("Class");
+  await expect(classSelect.locator("option",{hasText:"Grade 9 Mathematics"})).toHaveCount(1);
   await tp.getByLabel("Quiz title").fill(title);
-  await tp.getByLabel("Class").selectOption({label:"Grade 9 Mathematics"});
-  await tp.getByRole("button",{name:"Create draft"}).click();
+  await classSelect.selectOption({label:"Grade 9 Mathematics"});
+
+  const createButton=tp.getByRole("button",{name:"Create draft"});
+  await expect(createButton).toBeEnabled();
+  await createButton.click();
 
   const quizRow=tp.locator(".card").filter({hasText:title}).last();
   await expect(quizRow.getByText(title,{exact:true})).toBeVisible();
