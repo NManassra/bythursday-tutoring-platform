@@ -1,1 +1,0 @@
-# bythursday-tutoring-platform
