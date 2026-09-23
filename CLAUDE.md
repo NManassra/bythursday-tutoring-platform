@@ -58,3 +58,12 @@ Before changing business logic, inspect the relevant API authorization and schem
 - Student answers are autosaved server-side and restored when the attempt is resumed.
 - Autosave and navigation guards are UX protections; never treat client-side navigation controls as security boundaries.
 - Submission remains server-authoritative and transactional.
+
+## Reliability and audit
+- Timer expiry must be finalized server-side from server-saved answers; the browser timer is not authoritative.
+- Autosave uses bounded retries and must surface offline/retry state.
+- Explicit Exit Quiz is a UX action; browser navigation guards are not security controls.
+- Mutating routes should validate request Origin as CSRF defense-in-depth.
+- Login attempts are rate-limited; important authentication and quiz lifecycle events are audited.
+- Teacher analytics may expose question-level correct, answered and unanswered rates only within the quiz owner's scope.
+- Mobile QA targets 360x800, 390x844 and tablet widths.
