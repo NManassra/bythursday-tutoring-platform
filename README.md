@@ -78,9 +78,20 @@ The browser countdown is presentation only. The server decides whether an attemp
 
 Unit tests cover scoring and validation. Playwright covers authentication, the student quiz flow, teacher publishing flow and cross-student attempt authorization.
 
+## Reliability, accessibility and exam integrity
+
+- The browser shows the server-created deadline and countdown; at expiry it requests server-side finalization from the last saved answers.
+- Autosave uses bounded retries and an offline/reconnect indicator. Saved answers are restored when an attempt is resumed.
+- Exit Quiz is explicit; browser back/refresh warnings are UX safeguards only.
+- Teacher analytics include question-level correct, answered and unanswered rates.
+- Mutating API routes validate request origin as CSRF defense-in-depth, and login attempts are rate-limited.
+- Important authentication and quiz lifecycle events are recorded in the audit log.
+- Mobile QA targets 360x800, 390x844 and tablet widths. Focus states, labels, touch targets and RTL content boundaries are covered in the UI.
+
 ## Documentation
 
 - `DECISIONS.md` — architecture and business-rule decisions.
+- `ARCHITECTURE_THREAT_MODEL.md` — trust boundaries, threats, mitigations and production hardening.
 - `SECURITY_AUDIT.md` — verified security controls and remaining production hardening.
 - `CLAUDE.md` — implementation conventions for future agents.
 - `AI_USAGE.md` — AI assistance and human-review boundaries.
