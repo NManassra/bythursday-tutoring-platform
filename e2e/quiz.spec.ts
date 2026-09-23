@@ -88,3 +88,16 @@ test("quiz remains readable at tablet width",async({page})=>{
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
   await expect(page.locator('input[type="radio"]').first()).toBeVisible();
 });
+
+
+test("student sees reconnect state during a network interruption",async({page,context})=>{
+  await page.goto("/login");
+  await page.getByLabel("Email").fill("student13@bythursday.demo");
+  await page.getByLabel("Password").fill("Demo12345!");
+  await page.getByRole("button",{name:"Sign in"}).click();
+  await page.getByRole("link",{name:"Open quiz"}).first().click();
+  await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
+  await context.setOffline(true);
+  await expect(page.getByRole("alert",{name:""}).filter({hasText:"offline"})).toBeVisible({timeout:3000});
+  await context.setOffline(false);
+});
