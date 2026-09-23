@@ -23,3 +23,9 @@ The document defaults to auto direction. Arabic or mixed-direction user content 
 
 ## Progressive disclosure
 The teacher dashboard separates authoring from quiz management and analytics. Students see only currently available assigned quizzes, with clear loading, empty and error states.
+
+
+## Active-attempt navigation and recovery
+Leaving an in-progress quiz does not create a new attempt or reset the timer. The browser back action is intercepted with a warning, and refresh/close uses the browser's native leave-warning where supported. This is a UX safeguard, not a security boundary: browsers do not permit ordinary web pages to permanently disable back/forward navigation. The server remains authoritative over the attempt deadline and submission state.
+
+In-progress answers are autosaved server-side after changes. When a student returns to the same attempt, saved answers are restored. This mirrors common LMS behavior: Moodle supports continuing an unfinished attempt and autosaving responses, while Canvas keeps a timed attempt running when a student navigates away and supports resuming an in-process quiz. High-stakes lockdown behavior belongs to a dedicated exam browser such as Safe Exam Browser rather than ordinary page JavaScript.
