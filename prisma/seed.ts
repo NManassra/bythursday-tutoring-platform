@@ -40,7 +40,7 @@ async function main(){
   }
 
   const now=Date.now();
-  const quizConfigs=[
+  const quizConfigs: Array<[string,string,number,number,number,number,number,QuizStatus]>=[
     ["Algebra | الجبر","Core algebra practice",now-3600000,now+86400000,15,2,25,QuizStatus.PUBLISHED],
     ["Physics | الفيزياء","Forces and motion",now+3600000,now+90000000,20,1,0,QuizStatus.PUBLISHED],
     ["English Grammar | قواعد اللغة","Grammar review",now-86400000,now-3600000,25,2,25,QuizStatus.PUBLISHED],
