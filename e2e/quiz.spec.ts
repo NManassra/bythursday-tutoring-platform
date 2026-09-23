@@ -21,3 +21,47 @@ test("student completes a timed quiz and sees the result",async({page})=>{
   await expect(page).toHaveURL(/\/results\//);
   await expect(page.getByText("Submitted successfully.",{exact:true})).toBeVisible();
 });
+
+test("student can exit, resume, and restore an autosaved answer",async({page})=>{
+  await page.goto("/login");
+  await page.getByLabel("Email").fill("student8@bythursday.demo");
+  await page.getByLabel("Password").fill("Demo12345!");
+  await page.getByRole("button",{name:"Sign in"}).click();
+  await expect(page.getByText("Algebra | الجبر",{exact:true})).toBeVisible();
+  await page.getByRole("link",{name:"Open quiz"}).first().click();
+  await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
+  const first=page.locator('input[type="radio"]').first();
+  await first.check();
+  await expect(page.getByText("Answers saved",{exact:true})).toBeVisible({timeout:5000});
+  await page.getByRole("button",{name:"Exit quiz"}).click();
+  await expect(page).toHaveURL(/\/dashboard/);
+  await page.getByRole("link",{name:"Open quiz"}).first().click();
+  await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
+  await expect(page.locator('input[type="radio"]').first()).toBeChecked();
+});
+
+test("quiz navigation warns before leaving an active attempt",async({page})=>{
+  await page.goto("/login");
+  await page.getByLabel("Email").fill("student9@bythursday.demo");
+  await page.getByLabel("Password").fill("Demo12345!");
+  await page.getByRole("button",{name:"Sign in"}).click();
+  await page.getByRole("link",{name:"Open quiz"}).first().click();
+  await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
+  let dialogSeen=false;
+  page.on("dialog",async dialog=>{dialogSeen=true;await dialog.dismiss()});
+  await page.goBack();
+  await expect.poll(()=>dialogSeen).toBeTruthy();
+  await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
+});
+
+test("quiz remains usable at a mobile viewport",async({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto("/login");
+  await page.getByLabel("Email").fill("student10@bythursday.demo");
+  await page.getByLabel("Password").fill("Demo12345!");
+  await page.getByRole("button",{name:"Sign in"}).click();
+  await page.getByRole("link",{name:"Open quiz"}).first().click();
+  await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
+  await expect(page.getByRole("button",{name:"Exit quiz"})).toBeVisible();
+  await expect(page.getByRole("button",{name:"Submit quiz"})).toBeVisible();
+});
