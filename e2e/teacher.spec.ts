@@ -23,8 +23,12 @@ test("teacher creates and publishes a quiz that a student can see",async({browse
   const quizRow=tp.locator(".card").filter({hasText:title}).last();
   await expect(quizRow.getByText(title,{exact:true})).toBeVisible();
 
+  const publishResponse = tp.waitForResponse(response => response.url().includes("/api/quizzes/") && response.url().endsWith("/publish") && response.request().method() === "POST");
   await quizRow.getByRole("button",{name:"Publish"}).click();
-  await expect(quizRow.getByText("PUBLISHED",{exact:true})).toBeVisible();
+  await expect((await publishResponse).ok()).toBeTruthy();
+  await tp.reload();
+  const refreshedQuizRow = tp.locator(".card").filter({hasText:title}).last();
+  await expect(refreshedQuizRow.getByText("PUBLISHED",{exact:true})).toBeVisible();
 
   await teacher.close();
 
