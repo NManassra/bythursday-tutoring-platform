@@ -65,7 +65,7 @@ export default function QuizClient({quizId}:{quizId:string}){
       if(!cancelled)setSaveState("error");
     },350);
     return()=>{cancelled=true;clearTimeout(timer)};
-  },[answers,a,submitting]);
+  },[answers,a,submitting,online]);
 
   useEffect(()=>{
     if(!a||seconds>0||autoSubmittedRef.current||submitting||!online)return;
