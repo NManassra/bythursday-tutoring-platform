@@ -15,5 +15,9 @@ export const submitSchema=z.object({
 export const quizSchema=z.object({
   title:z.string().trim().min(1).max(160),description:z.string().max(1000).optional(),opensAt:z.coerce.date(),closesAt:z.coerce.date(),
   durationMinutes:z.number().int().min(1).max(300),pointsPerQuestion:z.number().positive().max(100),negativeMarkPercent:z.number().min(0).max(100),classId:z.string().min(1),
-  questions:z.array(z.object({text:z.string().trim().min(1).max(2000),options:z.array(z.object({text:z.string().trim().min(1).max(500),isCorrect:z.boolean()})).min(2).max(6)})).min(1).max(100)
+  questions:z.array(z.object({
+    text:z.string().trim().min(1).max(2000),
+    points:z.number().positive().max(100).optional(),
+    options:z.array(z.object({text:z.string().trim().min(1).max(500),isCorrect:z.boolean()})).min(2).max(6)
+  })).min(1).max(100)
 });
