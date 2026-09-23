@@ -9,7 +9,9 @@ import {assertSameOrigin} from "@/lib/security";
 
 export async function POST(req:Request){
   const forwarded=req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  const key="login:"+((forwarded||"unknown").slice(0,80));
+  const emailHint=req.headers.get("content-type")?.includes("application/json")?((await req.clone().json().catch(()=>({}))) as {email?:string}).email?.trim().toLowerCase():"";
+  const source=(forwarded||"unknown").slice(0,80);
+  const key="login:"+source+":"+emailHint.slice(0,254);
   if(!assertSameOrigin(req))return NextResponse.json({error:"Invalid origin"},{status:403});
   if(!(await loginAllowed(key)))return NextResponse.json({error:"Too many login attempts. Please try again later."},{status:429});
   try{
