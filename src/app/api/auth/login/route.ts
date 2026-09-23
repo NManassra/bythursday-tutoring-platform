@@ -1,3 +1,0 @@
-import {NextResponse} from "next/server";
-import {prisma} from "@/lib/db"; import {loginSchema} from "@/lib/validation"; import {verifyPassword} from "@/lib/password"; import {createSession} from "@/lib/session";
-export async function POST(req:Request){try{const input=loginSchema.parse(await req.json());const user=await prisma.user.findUnique({where:{email:input.email.toLowerCase()}});if(!user||!(await verifyPassword(input.password,user.passwordHash)))return NextResponse.json({error:"Invalid credentials"},{status:401});await createSession(user.id);return NextResponse.json({ok:true});}catch{return NextResponse.json({error:"Invalid request"},{status:400});}}

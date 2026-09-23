@@ -1,0 +1,1 @@
+import {redirect} from "next/navigation";import {getCurrentUser} from "@/lib/session";import QuizClient from "./quiz-client";export default async function QuizPage({params}:{params:Promise<{quizId:string}>}){const u=await getCurrentUser();if(!u||u.role!=="STUDENT")redirect("/login");const {quizId}=await params;return <QuizClient quizId={quizId}/>}
