@@ -27,7 +27,13 @@ export async function POST(req:Request,{params}:{params:Promise<{attemptId:strin
     const result=await prisma.$transaction(async tx=>{
       const fresh=await tx.attempt.findUnique({where:{id:attemptId}});
       if(!fresh||fresh.studentId!==u.id||fresh.submittedAt||new Date()>fresh.deadlineAt)throw new Error("CONFLICT");
-      await tx.attemptAnswer.createMany({data:body.answers.map(x=>({attemptId,questionId:x.questionId,optionId:x.optionId}))});
+      for(const answer of body.answers){
+        await tx.attemptAnswer.upsert({
+          where:{attemptId_questionId:{attemptId,questionId:answer.questionId}},
+          create:{attemptId,questionId:answer.questionId,optionId:answer.optionId},
+          update:{optionId:answer.optionId}
+        });
+      }
       return tx.attempt.update({where:{id:attemptId},data:{submittedAt:new Date(),score,maxScore}});
     });
     return NextResponse.json({score:result.score,maxScore:result.maxScore});
