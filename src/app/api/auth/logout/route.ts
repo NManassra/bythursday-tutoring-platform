@@ -1,1 +1,2 @@
-import {NextResponse} from "next/server";import {destroySession} from "@/lib/session";export async function POST(){await destroySession();return NextResponse.json({ok:true})}
+import {NextResponse} from "next/server";import {destroySession,getCurrentUser} from "@/lib/session";import {assertSameOrigin} from "@/lib/security";import {recordAudit} from "@/lib/audit";
+export async function POST(req:Request){if(!assertSameOrigin(req))return NextResponse.json({error:"Invalid origin"},{status:403});const u=await getCurrentUser();await destroySession();if(u)await recordAudit("LOGOUT","User",u.id,u.id);return NextResponse.json({ok:true})}
