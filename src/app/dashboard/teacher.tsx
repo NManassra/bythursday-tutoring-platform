@@ -76,7 +76,7 @@ export default function TeacherDashboard({user}:{user:{name:string}}){
 
  return <main className="shell" dir="auto">
    <div className="top">
-     <div><p className="eyebrow">Teacher workspace</p><h1>{user.name}</h1><p className="muted">Create, publish and monitor your quizzes.</p></div>
+     <div><p className="eyebrow">Teacher</p><h1>{user.name}</h1><p className="muted">Create, publish and monitor your quizzes.</p></div>
      <button className="btn secondary" onClick={async()=>{await fetch("/api/auth/logout",{method:"POST"});location.href="/login"}}>Sign out</button>
    </div>
 
