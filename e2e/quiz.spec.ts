@@ -5,7 +5,9 @@ test("student completes a timed quiz and sees the result",async({page})=>{
 
   await page.getByLabel("Email").fill("student8@bythursday.demo");
   await page.getByLabel("Password").fill("Demo12345!");
+  const quizzesResponse = page.waitForResponse(response => response.url().endsWith("/api/quizzes") && response.request().method() === "GET");
   await page.getByRole("button",{name:"Sign in"}).click();
+  await expect((await quizzesResponse).ok()).toBeTruthy();
 
   await expect(page.getByText("Algebra | الجبر",{exact:true})).toBeVisible();
 
