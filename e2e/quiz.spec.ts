@@ -65,3 +65,26 @@ test("quiz remains usable at a mobile viewport",async({page})=>{
   await expect(page.getByRole("button",{name:"Exit quiz"})).toBeVisible();
   await expect(page.getByRole("button",{name:"Submit quiz"})).toBeVisible();
 });
+
+
+test("quiz controls remain usable at 360px",async({page})=>{
+  await page.setViewportSize({width:360,height:800});
+  await page.goto("/login");
+  await page.getByLabel("Email").fill("student11@bythursday.demo");
+  await page.getByLabel("Password").fill("Demo12345!");
+  await page.getByRole("button",{name:"Sign in"}).click();
+  await page.getByRole("link",{name:"Open quiz"}).first().click();
+  await expect(page.getByRole("button",{name:"Exit quiz"})).toBeVisible();
+  await expect(page.getByRole("button",{name:"Submit quiz"})).toBeVisible();
+});
+
+test("quiz remains readable at tablet width",async({page})=>{
+  await page.setViewportSize({width:1024,height:768});
+  await page.goto("/login");
+  await page.getByLabel("Email").fill("student12@bythursday.demo");
+  await page.getByLabel("Password").fill("Demo12345!");
+  await page.getByRole("button",{name:"Sign in"}).click();
+  await page.getByRole("link",{name:"Open quiz"}).first().click();
+  await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
+  await expect(page.locator('input[type="radio"]').first()).toBeVisible();
+});
