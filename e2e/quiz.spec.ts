@@ -3,7 +3,7 @@ import {test,expect} from "@playwright/test";
 test("student completes a timed quiz and sees the result",async({page})=>{
   await page.goto("/login");
 
-  await page.getByLabel("Email").fill("student8@bythursday.demo");
+  await page.getByLabel("Email").fill("student14@bythursday.demo");
   await page.getByLabel("Password").fill("Demo12345!");
   const quizzesResponse = page.waitForResponse(response => response.url().endsWith("/api/quizzes") && response.request().method() === "GET");
   await page.getByRole("button",{name:"Sign in"}).click();
@@ -42,7 +42,7 @@ test("student can exit, resume, and restore an autosaved answer",async({page})=>
 
 test("quiz navigation warns before leaving an active attempt",async({page})=>{
   await page.goto("/login");
-  await page.getByLabel("Email").fill("student9@bythursday.demo");
+  await page.getByLabel("Email").fill("student15@bythursday.demo");
   await page.getByLabel("Password").fill("Demo12345!");
   await page.getByRole("button",{name:"Sign in"}).click();
   await page.getByRole("link",{name:"Open quiz"}).first().click();
@@ -57,7 +57,7 @@ test("quiz navigation warns before leaving an active attempt",async({page})=>{
 test("quiz remains usable at a mobile viewport",async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.goto("/login");
-  await page.getByLabel("Email").fill("student10@bythursday.demo");
+  await page.getByLabel("Email").fill("student16@bythursday.demo");
   await page.getByLabel("Password").fill("Demo12345!");
   await page.getByRole("button",{name:"Sign in"}).click();
   await page.getByRole("link",{name:"Open quiz"}).first().click();
@@ -70,7 +70,7 @@ test("quiz remains usable at a mobile viewport",async({page})=>{
 test("quiz controls remain usable at 360px",async({page})=>{
   await page.setViewportSize({width:360,height:800});
   await page.goto("/login");
-  await page.getByLabel("Email").fill("student11@bythursday.demo");
+  await page.getByLabel("Email").fill("student17@bythursday.demo");
   await page.getByLabel("Password").fill("Demo12345!");
   await page.getByRole("button",{name:"Sign in"}).click();
   await page.getByRole("link",{name:"Open quiz"}).first().click();
@@ -81,7 +81,7 @@ test("quiz controls remain usable at 360px",async({page})=>{
 test("quiz remains readable at tablet width",async({page})=>{
   await page.setViewportSize({width:1024,height:768});
   await page.goto("/login");
-  await page.getByLabel("Email").fill("student12@bythursday.demo");
+  await page.getByLabel("Email").fill("student18@bythursday.demo");
   await page.getByLabel("Password").fill("Demo12345!");
   await page.getByRole("button",{name:"Sign in"}).click();
   await page.getByRole("link",{name:"Open quiz"}).first().click();
@@ -92,7 +92,7 @@ test("quiz remains readable at tablet width",async({page})=>{
 
 test("student sees reconnect state during a network interruption",async({page,context})=>{
   await page.goto("/login");
-  await page.getByLabel("Email").fill("student13@bythursday.demo");
+  await page.getByLabel("Email").fill("student19@bythursday.demo");
   await page.getByLabel("Password").fill("Demo12345!");
   await page.getByRole("button",{name:"Sign in"}).click();
   await page.getByRole("link",{name:"Open quiz"}).first().click();
