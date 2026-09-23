@@ -10,23 +10,28 @@ async function login(page:Page,email:string){
 test("student cannot submit another student's attempt",async({browser})=>{
   const owner=await browser.newContext();
   const op=await owner.newPage();
-  await login(op,"student1@bythursday.demo");
+  await login(op,"student7@bythursday.demo");
+
   const href=await op.getByRole("link",{name:"Open quiz"}).first().getAttribute("href");
   expect(href).toBeTruthy();
 
   const responsePromise=op.waitForResponse(r=>r.url().includes("/api/quizzes/")&&r.url().endsWith("/start"));
   await op.goto(href!);
   const response=await responsePromise;
-  const started=await response.json() as {attemptId:string};
+  expect(response.ok()).toBeTruthy();
+
+  const started=await response.json() as {attemptId?:string};
   expect(started.attemptId).toBeTruthy();
   await owner.close();
 
   const attacker=await browser.newContext();
   const ap=await attacker.newPage();
   await login(ap,"student2@bythursday.demo");
+
   const result=await ap.request.post("/api/attempts/"+started.attemptId+"/submit",{
     data:{answers:[]}
   });
-  expect(result.status()).toBe(404);
+
+  expect(result.status()).toBe(403);
   await attacker.close();
 });
