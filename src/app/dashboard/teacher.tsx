@@ -132,13 +132,22 @@ export default function TeacherDashboard({user}:{user:{name:string}}){
          {x.status==="DRAFT"&&<button className="btn" disabled={busy===x.id} onClick={()=>publish(x.id)}>{busy===x.id?"Publishing…":"Publish"}</button>}
          <button className="btn secondary" onClick={()=>showAnalytics(x.id)}>View analytics</button>
        </div>
-       {analytics[x.id]&&<div className="analytics-grid">
+       {analytics[x.id]&&<>
+       <div className="analytics-grid">
          <div><span className="muted">Attempted</span><strong>{analytics[x.id].attempted}/{analytics[x.id].assigned}</strong></div>
          <div><span className="muted">Average</span><strong>{analytics[x.id].average}</strong></div>
          <div><span className="muted">Highest</span><strong>{analytics[x.id].highest}</strong></div>
          <div><span className="muted">Lowest</span><strong>{analytics[x.id].lowest}</strong></div>
          <div><span className="muted">Completion</span><strong>{analytics[x.id].completionRate}%</strong></div>
+       </div>
+       {!!analytics[x.id].questionPerformance?.length&&<div className="question-analytics" aria-label="Question performance">
+         <h4>Question performance</h4>
+         {analytics[x.id].questionPerformance.map((item,index)=><div className="question-analytics-row" key={item.questionId}>
+           <span><strong>Q{index+1}</strong> <span dir="auto">{item.question}</span></span>
+           <span>Correct {item.correctRate}% · Answered {item.answeredRate}% · Unanswered {item.unansweredRate}%</span>
+         </div>)}
        </div>}
+       </>}
      </article>)}
    </section>
  </main>
