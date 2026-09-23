@@ -4,7 +4,14 @@ import {useRouter} from "next/navigation";
 
 type QuizOption={id:string;text:string};
 type QuizQuestion={id:string;text:string;options:QuizOption[]};
-type StartedQuiz={attemptId:string;deadlineAt:string;submittedAt?:string|null;quiz:{title:string;questions:QuizQuestion[]}};
+type SavedAnswer={questionId:string;optionId:string|null};
+type StartedQuiz={
+  attemptId:string;
+  deadlineAt:string;
+  submittedAt?:string|null;
+  savedAnswers?:SavedAnswer[];
+  quiz:{title:string;questions:QuizQuestion[]}
+};
 
 function formatTime(totalSeconds:number){
   const safe=Math.max(0,totalSeconds);
@@ -17,6 +24,7 @@ export default function QuizClient({quizId}:{quizId:string}){
   const[msg,setMsg]=useState("");
   const[seconds,setSeconds]=useState(0);
   const[submitting,setSubmitting]=useState(false);
+  const[saveState,setSaveState]=useState<"saved"|"saving"|"error">("saved");
   const router=useRouter();
 
   useEffect(()=>{
@@ -25,6 +33,7 @@ export default function QuizClient({quizId}:{quizId:string}){
       if(!r.ok){setMsg(x.error??"Unable to start quiz");return}
       if(x.submittedAt){router.push("/results/"+x.attemptId);return}
       setA(x);
+      setAnswers(Object.fromEntries((x.savedAnswers??[]).filter(v=>v.optionId).map(v=>[v.questionId,v.optionId as string])));
       setSeconds(Math.max(0,Math.floor((new Date(x.deadlineAt).getTime()-Date.now())/1000)));
     }).catch(()=>setMsg("Unable to load the quiz. Please refresh and try again."));
   },[quizId,router]);
@@ -36,6 +45,47 @@ export default function QuizClient({quizId}:{quizId:string}){
     },500);
     return()=>clearInterval(t);
   },[a]);
+
+  useEffect(()=>{
+    if(!a||submitting)return;
+    const selected=Object.entries(answers).map(([questionId,optionId])=>({questionId,optionId}));
+    if(!selected.length)return;
+    setSaveState("saving");
+    const timer=setTimeout(()=>{
+      fetch("/api/attempts/"+a.attemptId+"/answers",{
+        method:"PUT",
+        headers:{"content-type":"application/json"},
+        body:JSON.stringify({answers:selected})
+      }).then(r=>{
+        if(!r.ok)throw new Error("save");
+        setSaveState("saved");
+      }).catch(()=>setSaveState("error"));
+    },350);
+    return()=>clearTimeout(timer);
+  },[answers,a,submitting]);
+
+  useEffect(()=>{
+    if(!a)return;
+    const state={quizGuard:true};
+    window.history.pushState(state,"",window.location.href);
+
+    const onPopState=()=>{
+      const leave=window.confirm("Your quiz is still in progress. Your timer will continue running if you leave, and you can resume the same attempt later. Leave the quiz?");
+      if(leave)router.push("/dashboard");
+      else window.history.pushState(state,"",window.location.href);
+    };
+    const onBeforeUnload=(event:BeforeUnloadEvent)=>{
+      event.preventDefault();
+      event.returnValue="";
+    };
+
+    window.addEventListener("popstate",onPopState);
+    window.addEventListener("beforeunload",onBeforeUnload);
+    return()=>{
+      window.removeEventListener("popstate",onPopState);
+      window.removeEventListener("beforeunload",onBeforeUnload);
+    };
+  },[a,router]);
 
   async function submit(){
     if(!a||submitting||seconds===0)return;
@@ -57,11 +107,13 @@ export default function QuizClient({quizId}:{quizId:string}){
   if(!a)return <main className="shell"><div className="card">{msg?<p className="danger">{msg}</p>:"Loading quiz…"}</div></main>;
 
   const urgent=seconds<=60;
+  const saveLabel=saveState==="saving"?"Saving answers…":saveState==="error"?"Answers not saved — retrying":"Answers saved";
   return <main className="shell" dir="auto">
     <div className="quiz-toolbar">
       <div className="quiz-title">
         <p className="eyebrow">Quiz in progress</p>
         <h1 dir="auto">{a.quiz.title}</h1>
+        <span className={"save-status "+(saveState==="error"?"save-status-error":"")}>{saveLabel}</span>
       </div>
       <div className={"countdown "+(urgent?"countdown-urgent":"")} role="timer" aria-live="polite" aria-label={"Time remaining "+formatTime(seconds)}>
         <span className="countdown-label">Time remaining</span>
