@@ -17,6 +17,16 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .eyebrow{margin:0 0 5px;color:#64748b;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
 .stat{font-size:28px;font-weight:800}
 .top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px}
+.quiz-toolbar{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:16px;margin:-32px -20px 24px;padding:14px 20px;background:#fff;border-bottom:1px solid #e2e8f0;box-shadow:0 4px 18px #0000000d}
+.quiz-title h1{margin:0;font-size:24px}
+.countdown{display:flex;align-items:center;gap:10px;border:1px solid #cbd5e1;border-radius:12px;padding:8px 14px;background:#f8fafc;min-width:150px;justify-content:center}
+.countdown-label{font-size:12px;color:#64748b;font-weight:700}
+.countdown strong{font-variant-numeric:tabular-nums;font-size:24px;line-height:1}
+.countdown-urgent{border-color:#fca5a5;background:#fef2f2;color:#b91c1c}
+.countdown-urgent .countdown-label{color:#b91c1c}
+.timer-warning{margin-bottom:16px;border-color:#fca5a5;background:#fef2f2}
+.result-card{text-align:center}
+.result-card .btn{display:inline-flex;margin-top:8px}
 .section-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px}
 .section-heading h2{margin:0}
 .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
@@ -37,6 +47,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .text-button{border:0;background:none;padding:8px;color:#475569;cursor:pointer}
 .text-button:hover{text-decoration:underline}
 .builder-actions{margin-top:20px}
+.form-hint{margin:10px 0 0}
 .quiz-row{padding:18px 0;border-bottom:1px solid #e2e8f0}
 .quiz-row:last-child{border-bottom:0}
 .quiz-row-main h3{margin:0 0 6px}
@@ -54,8 +65,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .quiz{display:block}
 .option{display:block;padding:12px;border:1px solid #e2e8f0;border-radius:10px;margin-top:8px}
 .option:has(input:checked){border-color:#172033;background:#f8fafc}
-@media(max-width:800px){.form-grid,.form-grid.four{grid-template-columns:1fr}.analytics-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:640px){.shell{padding:20px 14px}.top{align-items:flex-start;flex-direction:column}.top>.btn{width:100%}.card{padding:18px}.option-editor{grid-template-columns:28px 1fr}.option-editor .text-button{grid-column:2;text-align:start;padding:4px 0}.analytics-grid{grid-template-columns:1fr 1fr}.quiz-meta{flex-wrap:wrap}}
+@media(max-width:800px){.form-grid,.form-grid.four{grid-template-columns:1fr}.analytics-grid{grid-template-columns:repeat(2,1fr)}.quiz-toolbar{grid-template-columns:1fr auto}.quiz-toolbar .btn{grid-column:2;grid-row:1}.countdown{grid-column:1;grid-row:2;justify-self:start}}
+@media(max-width:640px){.shell{padding:20px 14px}.top{align-items:flex-start;flex-direction:column}.top>.btn{width:100%}.card{padding:18px}.quiz-toolbar{margin:-20px -14px 20px;padding:12px 14px;grid-template-columns:1fr}.quiz-toolbar .btn{grid-column:1;grid-row:auto;width:100%}.countdown{grid-column:1;grid-row:auto;width:100%}.quiz-title h1{font-size:20px}.option-editor{grid-template-columns:28px 1fr}.option-editor .text-button{grid-column:2;text-align:start;padding:4px 0}.analytics-grid{grid-template-columns:1fr 1fr}.quiz-meta{flex-wrap:wrap}}
 [dir="rtl"]{direction:rtl}
 [dir="rtl"] .top,[dir="rtl"] .section-heading,[dir="rtl"] .question-header{direction:rtl}
 [dir="rtl"] input,[dir="rtl"] textarea,[dir="rtl"] select{text-align:right}
