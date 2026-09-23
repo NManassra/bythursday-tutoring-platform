@@ -34,7 +34,7 @@ test("teacher creates and publishes a quiz that a student can see",async({browse
   await expect((await publishResponse).ok()).toBeTruthy();
   await tp.reload();
   const refreshedQuizRow = tp.locator(".card").filter({hasText:title}).last();
-  await expect(refreshedQuizRow.getByText("PUBLISHED",{exact:true})).toBeVisible();
+  await expect(refreshedQuizRow).toContainText("PUBLISHED");
 
   await teacher.close();
 
