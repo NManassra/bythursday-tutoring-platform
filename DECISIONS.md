@@ -14,3 +14,12 @@ Attempt has a unique (quizId, studentId) constraint. Submission is transactional
 
 ## Negative marking
 Correct = question points; wrong = -question points × negativeMarkPercent / 100; unanswered = 0; final score is clamped to zero.
+
+## Teacher authoring
+The teacher UI creates drafts through the same validated API used by any future authoring client. The UI supports question-level points, 2–6 options, one correct option, class assignment, availability dates, duration and negative marking. Publishing remains a separate server-side owner check.
+
+## Arabic and RTL
+The document defaults to auto direction. Arabic or mixed-direction user content uses dir="auto" at the content boundary so Arabic questions, titles and options can render naturally without forcing the entire application into RTL. CSS keeps controls readable and usable in both directions.
+
+## Progressive disclosure
+The teacher dashboard separates authoring from quiz management and analytics. Students see only currently available assigned quizzes, with clear loading, empty and error states.
