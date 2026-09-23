@@ -29,3 +29,15 @@ The teacher dashboard separates authoring from quiz management and analytics. St
 Leaving an in-progress quiz does not create a new attempt or reset the timer. The browser back action is intercepted with a warning, and refresh/close uses the browser's native leave-warning where supported. This is a UX safeguard, not a security boundary: browsers do not permit ordinary web pages to permanently disable back/forward navigation. The server remains authoritative over the attempt deadline and submission state.
 
 In-progress answers are autosaved server-side after changes. When a student returns to the same attempt, saved answers are restored. This mirrors common LMS behavior: Moodle supports continuing an unfinished attempt and autosaving responses, while Canvas keeps a timed attempt running when a student navigates away and supports resuming an in-process quiz. High-stakes lockdown behavior belongs to a dedicated exam browser such as Safe Exam Browser rather than ordinary page JavaScript.
+
+## Deadline finalization
+When the countdown reaches zero, the client requests a server-side finalization endpoint. The server loads the last autosaved answers, recalculates the score from database truth, and marks the attempt submitted transactionally. If the client is offline at the exact deadline, the attempt remains unsubmitted until a later request can be processed; the deadline still cannot be extended.
+
+## Autosave reliability
+Answer changes are debounced and retried with bounded exponential backoff. An offline indicator explains that selections remain local until connectivity returns. The server stores answers and the resume flow restores them.
+
+## Security hardening
+State-changing API routes validate Origin in addition to SameSite=Lax cookies. Login attempts are rate-limited in the database and important lifecycle events are recorded in an audit log. These are defense-in-depth controls, not substitutes for authorization checks.
+
+## Accessibility and responsive QA
+Quiz questions use fieldsets/legends and visible focus states. Interactive controls maintain touch-friendly dimensions. Manual and Playwright checks target 360x800, 390x844 and tablet widths.
