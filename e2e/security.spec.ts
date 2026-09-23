@@ -1,6 +1,6 @@
-import {test,expect} from "@playwright/test";
+import {test,expect,type Page} from "@playwright/test";
 
-async function login(page:any,email:string){
+async function login(page:Page,email:string){
   await page.goto("/login");
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Password").fill("Demo12345!");
