@@ -20,7 +20,7 @@ export default function QuizClient({quizId}:{quizId:string}){
   const[submitting,setSubmitting]=useState(false);
   const[saveState,setSaveState]=useState<"saved"|"saving"|"error">("saved");
   const[online,setOnline]=useState(true);
-  const[autoSubmitting,setAutoSubmitting]=useState(false);
+  const[autoSubmitting,setAutoSubmitting]=useState(false);\n  const[retryTick,setRetryTick]=useState(0);
   const router=useRouter();
   const autoSubmittedRef=useRef(false);
   const headingRef=useRef<HTMLHeadingElement>(null);
@@ -72,9 +72,9 @@ export default function QuizClient({quizId}:{quizId:string}){
     autoSubmittedRef.current=true;
     setAutoSubmitting(true);
     fetch("/api/attempts/"+a.attemptId+"/finalize",{method:"POST"})
-      .then(async r=>{const x=await r.json() as {submittedAt?:string;error?:string};if(r.status===202){setAutoSubmitting(false);autoSubmittedRef.current=false;setTimeout(()=>setSeconds(0),500);return}if(r.ok&&x.submittedAt)router.push("/results/"+a.attemptId);else{setMsg(x.error??"Time expired. Your attempt could not be finalized automatically.");setAutoSubmitting(false);}})
+      .then(async r=>{const x=await r.json() as {submittedAt?:string;error?:string};if(r.status===202){setAutoSubmitting(false);autoSubmittedRef.current=false;setTimeout(()=>setRetryTick(v=>v+1),500);return}if(r.ok&&x.submittedAt)router.push("/results/"+a.attemptId);else{setMsg(x.error??"Time expired. Your attempt could not be finalized automatically.");setAutoSubmitting(false);}})
       .catch(()=>{setMsg("Time expired. We could not reach the server to finalize your attempt. Reconnect and retry.");setAutoSubmitting(false);autoSubmittedRef.current=false});
-  },[a,seconds,submitting,router,online]);
+  },[a,seconds,submitting,router,online,retryTick]);
 
   useEffect(()=>{
     if(!a)return;
