@@ -7,7 +7,13 @@ test("teacher creates and publishes a quiz that a student can see",async({browse
   await tp.goto("/login");
   await tp.getByLabel("Email").fill("teacher1@bythursday.demo");
   await tp.getByLabel("Password").fill("Demo12345!");
+  const loginResponse = tp.waitForResponse(response =>
+    response.url().endsWith("/api/auth/login") &&
+    response.request().method() === "POST"
+  );
   await tp.getByRole("button",{name:"Sign in"}).click();
+  await expect((await loginResponse).ok()).toBeTruthy();
+  await expect(tp).toHaveURL(/\/dashboard/);
   await expect(tp.getByText("Teacher",{exact:true})).toBeVisible();
 
   const title="E2E Published Quiz";
