@@ -48,3 +48,13 @@ npm run build
 
 ## Review checklist
 Before changing business logic, inspect the relevant API authorization and schema constraints. Add or update tests for meaningful behavior changes. Do not weaken server-side checks to simplify UI code.
+
+
+## Active attempt recovery
+- Browser back is guarded with a leave warning while an attempt is in progress.
+- Refresh/close uses the browser's native before-unload warning where supported.
+- Leaving does not pause or reset the server-authoritative timer.
+- An unfinished attempt can be resumed through the same quiz URL until its deadline.
+- Student answers are autosaved server-side and restored when the attempt is resumed.
+- Autosave and navigation guards are UX protections; never treat client-side navigation controls as security boundaries.
+- Submission remains server-authoritative and transactional.
