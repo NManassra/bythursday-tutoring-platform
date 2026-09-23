@@ -16,8 +16,8 @@ export async function POST(req:Request){
     const key="login:"+source+":"+d.email.toLowerCase();
     if(!(await loginAllowed(key)))return NextResponse.json({error:"Too many login attempts. Please try again later."},{status:429});
     const u=await prisma.user.findUnique({where:{email:d.email.toLowerCase()}});
-    await recordLoginAttempt(key);
     if(!u||!(await verifyPassword(d.password,u.passwordHash))){
+      await recordLoginAttempt(key);
       await recordAudit("LOGIN_FAILED","User",u?.id,undefined,{key});
       return NextResponse.json({error:"Invalid credentials"},{status:401});
     }
