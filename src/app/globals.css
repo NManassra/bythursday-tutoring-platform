@@ -18,7 +18,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .stat{font-size:28px;font-weight:800}
 .top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px}
 .quiz-toolbar{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:16px;margin:-32px -20px 24px;padding:14px 20px;background:#fff;border-bottom:1px solid #e2e8f0;box-shadow:0 4px 18px #0000000d}
-.quiz-title h1{margin:0;font-size:24px}
+.quiz-title h1{margin:0;font-size:24px}.save-status{display:inline-block;margin-top:5px;font-size:12px;color:#15803d;font-weight:700}.save-status-error{color:#b91c1c}
 .countdown{display:flex;align-items:center;gap:10px;border:1px solid #cbd5e1;border-radius:12px;padding:8px 14px;background:#f8fafc;min-width:150px;justify-content:center}
 .countdown-label{font-size:12px;color:#64748b;font-weight:700}
 .countdown strong{font-variant-numeric:tabular-nums;font-size:24px;line-height:1}
