@@ -31,6 +31,7 @@ model User {
   taughtClasses  Class[]        @relation("ClassTeacher")
   quizzes        Quiz[]         @relation("QuizCreator")
   attempts       Attempt[]
+  auditEvents    AuditEvent[]  @relation("AuditActor")
 }
 
 model Session {
@@ -43,6 +44,29 @@ model Session {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  key       String
+  createdAt DateTime @default(now())
+
+  @@index([key, createdAt])
+}
+
+model AuditEvent {
+  id         String   @id @default(cuid())
+  action     String
+  entityType String
+  entityId   String?
+  actorId    String?
+  metadata   String?
+  createdAt  DateTime @default(now())
+  actor      User?    @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([actorId, createdAt])
+  @@index([entityType, entityId])
 }
 
 model Class {
