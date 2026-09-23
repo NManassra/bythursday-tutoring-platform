@@ -22,6 +22,13 @@ test("teacher creates and publishes a quiz that a student can see",async({browse
   await tp.getByLabel("Quiz title").fill(title);
   await classSelect.selectOption({label:"Grade 9 Mathematics"});
 
+  await tp.getByLabel("Question text").fill("What is 2 + 2?");
+  const optionInputs=tp.locator('input[placeholder^="Option "]');
+  await optionInputs.nth(0).fill("4");
+  await optionInputs.nth(1).fill("3");
+  await optionInputs.nth(2).fill("5");
+  await optionInputs.nth(3).fill("6");
+
   const createButton=tp.getByRole("button",{name:"Create draft"});
   await expect(createButton).toBeEnabled();
   await createButton.click();
