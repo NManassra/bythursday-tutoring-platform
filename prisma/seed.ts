@@ -21,6 +21,8 @@ async function main(){
   await p.classStudent.deleteMany();
   await p.class.deleteMany();
   await p.session.deleteMany();
+  await p.loginAttempt.deleteMany();
+  await p.auditEvent.deleteMany();
   await p.user.deleteMany();
 
   const hash=await bcrypt.hash("Demo12345!",12);
