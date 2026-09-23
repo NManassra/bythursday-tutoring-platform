@@ -119,6 +119,7 @@ export default function TeacherDashboard({user}:{user:{name:string}}){
        <button type="button" className="btn secondary" onClick={()=>setQuestions(prev=>[...prev,blankQuestion()])}>+ Add question</button>
        <button type="button" className="btn" disabled={busy==="create"||!title.trim()||!classId||questions.some(q=>!q.text.trim()||q.options.some(o=>!o.text.trim()))} onClick={create}>{busy==="create"?"Creating…":"Create draft"}</button>
      </div>
+     {(!title.trim()||!classId||questions.some(q=>!q.text.trim()||q.options.some(o=>!o.text.trim())))&&<p className="muted form-hint" role="status">Create draft becomes available after you enter a quiz title, choose a class, write each question, and fill every answer option.</p>}
      {message&&<p className={message.includes("created")?"success":"danger"} role="status">{message}</p>}
    </section>
 
