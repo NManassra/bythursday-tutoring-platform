@@ -98,6 +98,6 @@ test("student sees reconnect state during a network interruption",async({page,co
   await page.getByRole("link",{name:"Open quiz"}).first().click();
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
   await context.setOffline(true);
-  await expect(page.getByRole("alert",{name:""}).filter({hasText:"offline"})).toBeVisible({timeout:3000});
+  await expect(page.getByText("You are offline.",{exact:false})).toBeVisible({timeout:3000});
   await context.setOffline(false);
 });
