@@ -10,6 +10,6 @@ export async function POST(req:Request,{params}:{params:Promise<{attemptId:strin
   const {attemptId}=await params;
   const result=await finalizeExpiredAttempt(attemptId,u.id);
   if(!result)return NextResponse.json({error:"Not found"},{status:404});
-  if(result.expired===false)return NextResponse.json(result,{status:409});
+  if("expired" in result&&result.expired===false)return NextResponse.json(result,{status:202});
   return NextResponse.json(result);
 }
