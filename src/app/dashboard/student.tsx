@@ -17,7 +17,7 @@ export default function StudentDashboard({user}:{user:{name:string}}){
      <div className="quiz-card-head"><div><p className="eyebrow">Available quiz</p><h2 dir="auto">{x.title}</h2></div>{attempt?.submittedAt&&<span className="badge success-badge">Completed</span>}</div>
      {x.description&&<p className="muted" dir="auto">{x.description}</p>}
      <div className="quiz-meta"><span>{x.questions.length} questions</span><span>{x.durationMinutes} minutes</span></div>
-     <Link className="btn" href={"/quiz/"+x.id}>{attempt?.submittedAt?"View result":"Open quiz"}</Link>
+     <Link className="btn" href={attempt?.submittedAt?"/results/"+attempt.id:"/quiz/"+x.id}>{attempt?.submittedAt?"View result":"Open quiz"}</Link>
    </article>})}</div>}
  </main>
 }
