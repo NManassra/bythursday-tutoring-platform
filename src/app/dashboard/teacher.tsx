@@ -4,7 +4,7 @@ import {useEffect,useState} from "react";
 
 type TeacherQuiz={id:string;title:string;status:string;attempts:Array<unknown>;questions:Array<{id:string}>};
 type TeacherClass={id:string;name:string};
-type Analytics={attempted:number;assigned:number;average:number;highest:number;lowest:number;completionRate:number};
+type Analytics={attempted:number;assigned:number;average:number;highest:number;lowest:number;completionRate:number;questionPerformance?:Array<{questionId:string;question:string;answeredRate:number;correctRate:number;unansweredRate:number}>};
 type BuilderOption={text:string;isCorrect:boolean};
 type BuilderQuestion={text:string;points:number;options:BuilderOption[]};
 
