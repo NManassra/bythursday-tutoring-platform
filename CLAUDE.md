@@ -3,6 +3,18 @@
 ## Architecture
 Next.js App Router + TypeScript + Prisma/SQLite. Server code owns authentication, authorization, quiz availability, timing and scoring. The UI uses accessible custom CSS rather than relying on a component library.
 
+## Technology rationale
+- Next.js App Router keeps UI and server routes in one full-stack application.
+- TypeScript provides strict compile-time checks around business and API contracts.
+- Prisma provides typed database access and schema-level constraints.
+- SQLite keeps the assessment self-contained and requires no external database service.
+- Zod validates untrusted API input at the server boundary.
+- Responsive custom CSS keeps the interface lightweight and mobile-first.
+- bcryptjs provides password hashing.
+- Vitest covers deterministic unit-level business rules.
+- Playwright validates real browser workflows and authorization boundaries.
+- ESLint catches static code-quality issues.
+
 ## Security invariants
 - Never trust client role, user/student ID, score, deadline, quiz ownership or question/option relationships.
 - Validate request bodies with Zod.
@@ -37,9 +49,7 @@ Next.js App Router + TypeScript + Prisma/SQLite. Server code owns authentication
 
 ## Commands
 npm install
-npm run db:push
-npm run db:seed
-npm run dev
+npm run setup
 npm run lint
 npm run typecheck
 npm test
@@ -48,7 +58,6 @@ npm run build
 
 ## Review checklist
 Before changing business logic, inspect the relevant API authorization and schema constraints. Add or update tests for meaningful behavior changes. Do not weaken server-side checks to simplify UI code.
-
 
 ## Active attempt recovery
 - Browser back is guarded with a leave warning while an attempt is in progress.
