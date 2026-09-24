@@ -64,7 +64,7 @@ export default function QuizClient({quizId}:{quizId:string}){
           const r=await fetch("/api/attempts/"+a.attemptId+"/answers",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify({answers:selected})});
           if(r.ok){setSaveState("saved");return}
           if(r.status===409){setSaveState("error");return}
-        }catch{}
+        }catch{setOfflineDetected(true);setOnline(false)}
         await new Promise(resolve=>setTimeout(resolve,500*Math.pow(2,attempt)));
       }
       if(!cancelled)setSaveState("error");
