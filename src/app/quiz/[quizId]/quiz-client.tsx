@@ -19,7 +19,7 @@ export default function QuizClient({quizId}:{quizId:string}){
   const[seconds,setSeconds]=useState(0);
   const[submitting,setSubmitting]=useState(false);
   const[saveState,setSaveState]=useState<"saved"|"saving"|"error">("saved");
-  const[online,setOnline]=useState(true);
+  const[online,setOnline]=useState(()=>typeof navigator==="undefined"||navigator.onLine);
   const[autoSubmitting,setAutoSubmitting]=useState(false);
   const[retryTick,setRetryTick]=useState(0);
   const router=useRouter();
@@ -83,8 +83,9 @@ export default function QuizClient({quizId}:{quizId:string}){
     const state={quizGuard:true};
     window.history.pushState(state,"",window.location.href);
     const onPopState=()=>{
+      window.history.pushState(state,"",window.location.href);
       const leave=window.confirm("Your quiz is still in progress. Your timer will continue running if you leave, and you can resume the same attempt later. Leave the quiz?");
-      if(leave)router.push("/dashboard");else window.history.pushState(state,"",window.location.href);
+      if(leave)router.push("/dashboard");
     };
     const onBeforeUnload=(event:BeforeUnloadEvent)=>{event.preventDefault();event.returnValue=""};
     window.addEventListener("popstate",onPopState);window.addEventListener("beforeunload",onBeforeUnload);
@@ -109,7 +110,7 @@ export default function QuizClient({quizId}:{quizId:string}){
 
   const urgent=seconds<=60;
   const deadline=new Date(a.deadlineAt).toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"});
-  const saveLabel=!online?"Offline — changes will retry when you reconnect":saveState==="saving"?"Saving answers…":saveState==="error"?"Answers not saved — retrying":"Answers saved";
+  const saveLabel=isOffline?"Offline — changes will retry when you reconnect":saveState==="saving"?"Saving answers…":saveState==="error"?"Answers not saved — retrying":"Answers saved";
 
   return <main className="shell" dir="auto">
     <div className="quiz-toolbar">
@@ -127,7 +128,7 @@ export default function QuizClient({quizId}:{quizId:string}){
         <button className="btn" type="button" disabled={seconds===0||submitting||autoSubmitting} onClick={submit}>{submitting?"Submitting…":seconds===0?"Time expired":"Submit quiz"}</button>
       </div>
     </div>
-    {!online&&<div className="card network-banner" role="alert">You are offline. Your current selections remain on this page and saved answers will retry automatically when the connection returns.</div>}
+    {isOffline&&<div className="card network-banner" role="alert">You are offline. Your current selections remain on this page and saved answers will retry automatically when the connection returns.</div>}
     {urgent&&seconds>0&&<div className="card timer-warning" role="status">Less than one minute remains. Submit before the server deadline.</div>}
     {seconds===0&&<div className="card timer-warning" role="status">{autoSubmitting?"Time expired — finalizing your attempt…":"Your time has expired. Your attempt is being finalized from the last server-saved answers."}</div>}
     {msg&&<div className="card"><p className="danger" role="alert">{msg}</p></div>}
