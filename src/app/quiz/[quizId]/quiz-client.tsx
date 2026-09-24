@@ -20,7 +20,8 @@ export default function QuizClient({quizId}:{quizId:string}){
   const[submitting,setSubmitting]=useState(false);
   const[saveState,setSaveState]=useState<"saved"|"saving"|"error">("saved");
   const[online,setOnline]=useState(true);
-  const[autoSubmitting,setAutoSubmitting]=useState(false);\n  const[retryTick,setRetryTick]=useState(0);
+  const[autoSubmitting,setAutoSubmitting]=useState(false);
+  const[retryTick,setRetryTick]=useState(0);
   const router=useRouter();
   const autoSubmittedRef=useRef(false);
   const headingRef=useRef<HTMLHeadingElement>(null);
