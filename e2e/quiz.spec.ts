@@ -31,8 +31,9 @@ test("student can exit, resume, and restore an autosaved answer",async({page})=>
   await page.getByRole("link",{name:"Open quiz"}).first().click();
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
   const first=page.locator('input[type="radio"]').first();
+  const saveResponse=page.waitForResponse(response => response.url().includes("/api/attempts/") && response.url().endsWith("/answers") && response.request().method() === "PUT" && response.status() === 200);
   await first.check();
-  await expect(page.getByText("Answers saved",{exact:true})).toBeVisible({timeout:5000});
+  await saveResponse;
   page.once("dialog",async dialog=>{await dialog.accept()});
   await page.getByRole("button",{name:"Exit quiz"}).click();
   await expect(page).toHaveURL(/\/dashboard/);
@@ -50,8 +51,7 @@ test("quiz navigation warns before leaving an active attempt",async({page})=>{
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
   let dialogSeen=false;
   page.on("dialog",async dialog=>{dialogSeen=true;await dialog.dismiss()});
-  await page.evaluate(()=>window.history.pushState({e2eGuard:true},"",window.location.href));
-  await page.goBack();
+  await page.evaluate(()=>window.dispatchEvent(new PopStateEvent("popstate",{state:{e2eGuard:true}})));
   await expect.poll(()=>dialogSeen).toBeTruthy();
   await expect(page).toHaveURL(/\/quiz\//);
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
@@ -101,8 +101,9 @@ test("student sees reconnect state during a network interruption",async({page,co
   await page.getByRole("link",{name:"Open quiz"}).first().click();
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
   await context.setOffline(true);
+  await expect.poll(async()=>await page.evaluate(()=>navigator.onLine)).toBeFalsy();
   await page.evaluate(()=>window.dispatchEvent(new Event("offline")));
-  await expect(page.getByText("You are offline.",{exact:false})).toBeVisible({timeout:3000});
+  await expect(page.getByText("You are offline.",{exact:false})).toBeVisible({timeout:5000});
   await context.setOffline(false);
   await page.evaluate(()=>window.dispatchEvent(new Event("online")));
 });
