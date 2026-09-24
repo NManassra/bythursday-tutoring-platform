@@ -39,10 +39,10 @@ export default function QuizClient({quizId}:{quizId:string}){
   useEffect(()=>{
     const syncOnline=()=>{setOnline(true);setOfflineDetected(false)};
     const syncOffline=()=>{setOnline(false);setOfflineDetected(true)};
-    if(!navigator.onLine)syncOffline();else syncOnline();
-    window.addEventListener("online",syncOnline);window.addEventListener("offline",syncOffline);
-    const poll=window.setInterval(()=>navigator.onLine?syncOnline():syncOffline(),250);
-    return()=>{window.removeEventListener("online",syncOnline);window.removeEventListener("offline",syncOffline);window.clearInterval(poll)};
+    if(!navigator.onLine)syncOffline();else setOnline(true);
+    window.addEventListener("online",syncOnline);
+    window.addEventListener("offline",syncOffline);
+    return()=>{window.removeEventListener("online",syncOnline);window.removeEventListener("offline",syncOffline)};
   },[]);
 
   useEffect(()=>{
