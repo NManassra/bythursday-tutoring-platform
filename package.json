@@ -14,7 +14,8 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "db:reset": "prisma migrate reset --force"
+    "db:reset": "prisma migrate reset --force",
+    "setup": "node scripts/setup.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.15.0",
@@ -37,5 +38,7 @@
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
-  "engines": {"node": ">=20.9.0"}
+  "engines": {
+    "node": ">=20.9.0"
+  }
 }
