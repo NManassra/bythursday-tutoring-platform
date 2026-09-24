@@ -33,7 +33,7 @@ async function main(){
   for(let i=0;i<3;i++){
     classes.push(await p.class.create({
       data:{
-        name:["Grade 9 Mathematics","Grade 10 Science","Grade 11 English"][i],
+        name:["10A","10B","11A"][i],
         code:`G${i+9}-${i+1}`,
         teacherId:teachers[i].id,
         students:{create:students.slice(i*20,(i+1)*20).map(s=>({studentId:s.id}))}
