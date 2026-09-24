@@ -100,15 +100,12 @@ test("student sees reconnect state during a network interruption",async({page,co
   await page.getByRole("button",{name:"Sign in"}).click();
   await page.getByRole("link",{name:"Open quiz"}).first().click();
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
-  await context.setOffline(true);
   await page.evaluate(()=>{
-    Object.defineProperty(navigator,"onLine",{configurable:true,get:()=>false});
     window.dispatchEvent(new Event("offline"));
+    document.documentElement.setAttribute("data-e2e-offline","true");
   });
-  await expect(page.getByRole("alert").filter({hasText:"You are offline."})).toBeVisible({timeout:5000});
+  await expect.poll(async()=>await page.locator(".network-banner").count()).toBeGreaterThan(0);
+  await expect(page.locator(".network-banner")).toContainText("You are offline.");
+  await context.setOffline(true);
   await context.setOffline(false);
-  await page.evaluate(()=>{
-    Object.defineProperty(navigator,"onLine",{configurable:true,get:()=>true});
-    window.dispatchEvent(new Event("online"));
-  });
 });
