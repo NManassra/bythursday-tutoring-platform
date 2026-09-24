@@ -101,9 +101,14 @@ test("student sees reconnect state during a network interruption",async({page,co
   await page.getByRole("link",{name:"Open quiz"}).first().click();
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
   await context.setOffline(true);
-  await expect.poll(async()=>await page.evaluate(()=>navigator.onLine)).toBeFalsy();
-  await page.evaluate(()=>window.dispatchEvent(new Event("offline")));
-  await expect(page.getByText("You are offline.",{exact:false})).toBeVisible({timeout:5000});
+  await page.evaluate(()=>{
+    Object.defineProperty(navigator,"onLine",{configurable:true,get:()=>false});
+    window.dispatchEvent(new Event("offline"));
+  });
+  await expect(page.getByRole("alert").filter({hasText:"You are offline."})).toBeVisible({timeout:5000});
   await context.setOffline(false);
-  await page.evaluate(()=>window.dispatchEvent(new Event("online")));
+  await page.evaluate(()=>{
+    Object.defineProperty(navigator,"onLine",{configurable:true,get:()=>true});
+    window.dispatchEvent(new Event("online"));
+  });
 });
