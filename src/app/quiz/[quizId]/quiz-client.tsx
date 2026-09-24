@@ -22,6 +22,7 @@ export default function QuizClient({quizId}:{quizId:string}){
   const[online,setOnline]=useState(()=>typeof navigator==="undefined"||navigator.onLine);
   const[autoSubmitting,setAutoSubmitting]=useState(false);
   const[retryTick,setRetryTick]=useState(0);
+  const isOffline=!online;
   const router=useRouter();
   const autoSubmittedRef=useRef(false);
   const headingRef=useRef<HTMLHeadingElement>(null);
