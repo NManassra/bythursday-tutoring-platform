@@ -37,19 +37,32 @@ The stack was selected for a small operational footprint, strong typing, straigh
 
 Requirements: Node.js 20.9+.
 
-Install dependencies once:
+### One-command setup
+
+On a clean checkout, install dependencies once:
 
 ```bash
 npm install
 ```
 
-Then the application can be started and seeded from a clean local checkout with **one command**:
+**After that, the one command required to set up the database, load the sample data, and start the application is:**
 
 ```bash
 npm run setup
 ```
 
-`npm run setup` creates `.env` from `.env.example` when needed, applies the Prisma schema, loads the deterministic sample data, and starts the Next.js development server. The seed resets the local assessment database, so it should only be used for a fresh/demo environment.
+That single command:
+
+1. Creates `.env` from `.env.example` when needed.
+2. Applies the Prisma schema.
+3. Loads the deterministic sample data.
+4. Starts the Next.js development server.
+
+Open the local URL shown by Next.js in the terminal.
+
+> **Assessment note:** `npm install` is the standard dependency-installation prerequisite on a clean machine. `npm run setup` is the project's **one-command application setup and startup command**.
+
+The seed resets the local assessment database, so `npm run setup` should only be used for a fresh/demo environment.
 
 For a production build:
 
