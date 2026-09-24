@@ -25,13 +25,21 @@ Next.js App Router, TypeScript, Prisma, SQLite, Zod, Vitest and Playwright.
 
 ## Run
 
+Requirements: Node.js 20.9+.
+
+Install dependencies once:
+
 ```bash
 npm install
-cp .env.example .env
-npm run db:push
-npm run db:seed
-npm run dev
 ```
+
+Then the application can be started and seeded from a clean local checkout with **one command**:
+
+```bash
+npm run setup
+```
+
+`npm run setup` creates `.env` from `.env.example` when needed, applies the Prisma schema, loads the deterministic sample data, and starts the Next.js development server. The seed resets the local assessment database, so it should only be used for a fresh/demo environment.
 
 For a production build:
 
@@ -39,6 +47,10 @@ For a production build:
 npm run build
 npm start
 ```
+
+## Sample data
+
+The seed models Nour's stated starting cohort with three classes — `10A`, `10B`, and `11A` — and 60 students (20 per class), plus four teachers. The representative quizzes use 15 multiple-choice questions with four options each, Arabic/English content, varied per-question points, availability windows, negative-marking and non-negative-marking examples, an upcoming quiz, a draft quiz, and completed attempts for analytics.
 
 ## Demo accounts
 
@@ -95,3 +107,4 @@ Unit tests cover scoring and validation. Playwright covers authentication, the s
 - `SECURITY_AUDIT.md` — verified security controls and remaining production hardening.
 - `CLAUDE.md` — implementation conventions for future agents.
 - `AI_USAGE.md` — AI assistance and human-review boundaries.
+- `scripts/setup.mjs` — clean-machine setup/seed/start command.
