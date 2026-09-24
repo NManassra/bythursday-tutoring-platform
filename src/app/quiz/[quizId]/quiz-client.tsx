@@ -35,10 +35,11 @@ export default function QuizClient({quizId}:{quizId:string}){
   useEffect(()=>{if(a)headingRef.current?.focus()},[a]);
 
   useEffect(()=>{
-    const on=()=>setOnline(true),off=()=>setOnline(false);
-    setOnline(navigator.onLine);
-    window.addEventListener("online",on);window.addEventListener("offline",off);
-    return()=>{window.removeEventListener("online",on);window.removeEventListener("offline",off)};
+    const sync=()=>setOnline(navigator.onLine);
+    sync();
+    window.addEventListener("online",sync);window.addEventListener("offline",sync);
+    const poll=window.setInterval(sync,250);
+    return()=>{window.removeEventListener("online",sync);window.removeEventListener("offline",sync);window.clearInterval(poll)};
   },[]);
 
   useEffect(()=>{
