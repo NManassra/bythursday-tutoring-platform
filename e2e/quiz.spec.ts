@@ -100,12 +100,11 @@ test("student sees reconnect state during a network interruption",async({page,co
   await page.getByRole("button",{name:"Sign in"}).click();
   await page.getByRole("link",{name:"Open quiz"}).first().click();
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
-  await page.evaluate(()=>{
-    window.dispatchEvent(new Event("offline"));
-    document.documentElement.setAttribute("data-e2e-offline","true");
-  });
-  await expect.poll(async()=>await page.locator(".network-banner").count()).toBeGreaterThan(0);
-  await expect(page.locator(".network-banner")).toContainText("You are offline.");
-  await context.setOffline(true);
+
+  await page.route("**/api/attempts/*/answers",route=>route.abort());
+  await page.locator('input[type="radio"]').first().check();
+  await expect(page.getByText("You are offline.",{exact:false})).toBeVisible({timeout:5000});
+
+  await page.unroute("**/api/attempts/*/answers");
   await context.setOffline(false);
 });
