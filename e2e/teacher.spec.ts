@@ -18,9 +18,9 @@ test("teacher creates and publishes a quiz that a student can see",async({browse
 
   const title="E2E Published Quiz";
   const classSelect=tp.getByLabel("Class");
-  await expect(classSelect.locator("option",{hasText:"Grade 9 Mathematics"})).toHaveCount(1);
+  await expect(classSelect.locator("option",{hasText:"10A"})).toHaveCount(1);
   await tp.getByLabel("Quiz title").fill(title);
-  await classSelect.selectOption({label:"Grade 9 Mathematics"});
+  await classSelect.selectOption({label:"10A"});
 
   await tp.getByLabel("Question text").fill("What is 2 + 2?");
   const optionInputs=tp.locator('input[placeholder^="Option "]');
