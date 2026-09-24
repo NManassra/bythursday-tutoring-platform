@@ -20,9 +20,10 @@ export default function QuizClient({quizId}:{quizId:string}){
   const[submitting,setSubmitting]=useState(false);
   const[saveState,setSaveState]=useState<"saved"|"saving"|"error">("saved");
   const[online,setOnline]=useState(()=>typeof navigator==="undefined"||navigator.onLine);
+  const[offlineDetected,setOfflineDetected]=useState(false);
   const[autoSubmitting,setAutoSubmitting]=useState(false);
   const[retryTick,setRetryTick]=useState(0);
-  const isOffline=!online;
+  const isOffline=!online||offlineDetected;
   const router=useRouter();
   const autoSubmittedRef=useRef(false);
   const headingRef=useRef<HTMLHeadingElement>(null);
@@ -36,11 +37,12 @@ export default function QuizClient({quizId}:{quizId:string}){
   useEffect(()=>{if(a)headingRef.current?.focus()},[a]);
 
   useEffect(()=>{
-    const sync=()=>setOnline(navigator.onLine);
-    sync();
-    window.addEventListener("online",sync);window.addEventListener("offline",sync);
-    const poll=window.setInterval(sync,250);
-    return()=>{window.removeEventListener("online",sync);window.removeEventListener("offline",sync);window.clearInterval(poll)};
+    const syncOnline=()=>{setOnline(true);setOfflineDetected(false)};
+    const syncOffline=()=>{setOnline(false);setOfflineDetected(true)};
+    if(!navigator.onLine)syncOffline();else syncOnline();
+    window.addEventListener("online",syncOnline);window.addEventListener("offline",syncOffline);
+    const poll=window.setInterval(()=>navigator.onLine?syncOnline():syncOffline(),250);
+    return()=>{window.removeEventListener("online",syncOnline);window.removeEventListener("offline",syncOffline);window.clearInterval(poll)};
   },[]);
 
   useEffect(()=>{
