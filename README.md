@@ -25,7 +25,7 @@ A secure, mobile-first tutoring quiz platform built for the practical assessment
 - **TypeScript** — strict typing for safer refactoring and clearer server/client contracts.
 - **Prisma + SQLite** — typed database access with a zero-service local database suitable for the assessment.
 - **Zod** — runtime validation at untrusted API boundaries.
-- **Tailwind CSS / custom responsive CSS** — lightweight mobile-first styling.
+- **Custom responsive CSS** — lightweight mobile-first styling with direct control over Arabic/RTL layouts.
 - **bcryptjs** — password hashing.
 - **Vitest** — unit tests for scoring and validation.
 - **Playwright** — browser-level end-to-end coverage.
