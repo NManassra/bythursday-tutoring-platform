@@ -9,7 +9,7 @@ The implementation intentionally uses a small full-stack stack that is easy to r
 - **Prisma** — provides a typed database client and schema constraints, including the unique constraint that prevents duplicate student attempts.
 - **SQLite** — keeps the assessment self-contained with zero external database services. It is appropriate for the demo/assessment workload; a managed relational database would be used for real production traffic.
 - **Zod** — validates untrusted request bodies at the API boundary before values reach business logic or database writes.
-- **Tailwind CSS / custom responsive CSS** — supports a mobile-first interface without introducing a large design-system dependency. The implementation keeps the UI lightweight and responsive for phone-sized screens.
+- **Custom responsive CSS** — supports a mobile-first interface without introducing a large design-system dependency. The implementation keeps the UI lightweight and responsive for phone-sized screens.
 - **Accessible custom UI patterns** — quiz questions use semantic fieldsets/legends, visible focus states and touch-friendly controls. A component library was deliberately not required because the application has a small set of focused interaction patterns.
 - **bcryptjs** — hashes passwords with a deliberately expensive password-hashing function rather than storing plaintext credentials.
 - **Vitest** — provides fast unit coverage for deterministic business logic such as scoring and validation.
