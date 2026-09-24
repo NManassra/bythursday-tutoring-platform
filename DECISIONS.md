@@ -41,3 +41,26 @@ State-changing API routes validate Origin in addition to SameSite=Lax cookies. L
 
 ## Accessibility and responsive QA
 Quiz questions use fieldsets/legends and visible focus states. Interactive controls maintain touch-friendly dimensions. Manual and Playwright checks target 360x800, 390x844 and tablet widths.
+
+
+## What I built beyond the brief
+
+- Autosaving in-progress answers and restoring them after refresh/re-entry, because a timed quiz should tolerate ordinary browser navigation and transient connectivity without creating a second attempt.
+- Server-side deadline finalization from saved answers, so the browser timer remains presentation-only.
+- Login rate limiting, request-origin validation, audit events, security headers and a threat-model document as defense-in-depth for a public-facing assessment project.
+- Question-level analytics and explicit loading, empty, error and offline states to make the workflow more useful and inspectable.
+
+## Deliberately left out
+
+- No real spreadsheet import yet: the brief says real spreadsheets will arrive later, so deterministic seed data is provided instead of inventing an import format.
+- No password reset, email verification, teacher invitation flow or production account administration; these are outside the assessment's core workflow.
+- No high-stakes browser lockdown or anti-cheating controls; ordinary browser JavaScript cannot provide a reliable exam-lockdown boundary.
+- No production deployment, managed database, distributed rate limiter or centralized audit logging; the assessment uses SQLite and local operational controls.
+
+## If I had another week
+
+1. Add a validated CSV/XLSX import pipeline with preview, row-level validation and an import report.
+2. Add teacher class/student management and richer reporting/export.
+3. Add production deployment configuration with a managed database, secret management, centralized logging, monitoring and backups.
+4. Add a restrictive CSP and a distributed abuse-prevention layer after deployment-specific testing.
+5. Expand adversarial and accessibility coverage around concurrency, reconnects, keyboard-only navigation and real mobile devices.
