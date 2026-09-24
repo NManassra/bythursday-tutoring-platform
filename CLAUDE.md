@@ -9,7 +9,7 @@ Next.js App Router + TypeScript + Prisma/SQLite. Server code owns authentication
 - Prisma provides typed database access and schema-level constraints.
 - SQLite keeps the assessment self-contained and requires no external database service.
 - Zod validates untrusted API input at the server boundary.
-- Responsive custom CSS keeps the interface lightweight and mobile-first.
+- Custom responsive CSS keeps the interface lightweight and mobile-first, including Arabic/RTL layouts.
 - bcryptjs provides password hashing.
 - Vitest covers deterministic unit-level business rules.
 - Playwright validates real browser workflows and authorization boundaries.
