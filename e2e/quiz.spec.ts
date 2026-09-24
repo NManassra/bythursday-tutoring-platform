@@ -51,7 +51,8 @@ test("quiz navigation warns before leaving an active attempt",async({page})=>{
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
   let dialogSeen=false;
   page.on("dialog",async dialog=>{dialogSeen=true;await dialog.dismiss()});
-  await page.evaluate(()=>window.dispatchEvent(new PopStateEvent("popstate",{state:{e2eGuard:true}})));
+  await page.evaluate(()=>window.history.pushState({e2eGuard:true},"",window.location.href));
+  await page.evaluate(()=>window.history.back());
   await expect.poll(()=>dialogSeen).toBeTruthy();
   await expect(page).toHaveURL(/\/quiz\//);
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
