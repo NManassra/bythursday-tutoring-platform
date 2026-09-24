@@ -19,9 +19,19 @@ A secure, mobile-first tutoring quiz platform built for the practical assessment
 - Publish complete drafts.
 - View attempted/assigned counts, average, highest, lowest and completion rate.
 
-## Stack
+## Stack and rationale
 
-Next.js App Router, TypeScript, Prisma, SQLite, Zod, Vitest and Playwright.
+- **Next.js App Router** — keeps the React UI and server-side application routes in one codebase.
+- **TypeScript** — strict typing for safer refactoring and clearer server/client contracts.
+- **Prisma + SQLite** — typed database access with a zero-service local database suitable for the assessment.
+- **Zod** — runtime validation at untrusted API boundaries.
+- **Tailwind CSS / custom responsive CSS** — lightweight mobile-first styling.
+- **bcryptjs** — password hashing.
+- **Vitest** — unit tests for scoring and validation.
+- **Playwright** — browser-level end-to-end coverage.
+- **ESLint** — static code-quality checks.
+
+The stack was selected for a small operational footprint, strong typing, straightforward server-side authorization, and a clean local setup. Production would use a managed relational database and deployment-specific operational controls.
 
 ## Run
 
@@ -102,7 +112,7 @@ Unit tests cover scoring and validation. Playwright covers authentication, the s
 
 ## Documentation
 
-- `DECISIONS.md` — architecture and business-rule decisions.
+- `DECISIONS.md` — architecture, technology rationale, significant implementation issues, business-rule decisions and scope.
 - `ARCHITECTURE_THREAT_MODEL.md` — trust boundaries, threats, mitigations and production hardening.
 - `SECURITY_AUDIT.md` — verified security controls and remaining production hardening.
 - `CLAUDE.md` — implementation conventions for future agents.
