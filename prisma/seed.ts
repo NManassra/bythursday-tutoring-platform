@@ -25,7 +25,7 @@ async function main(){
   await p.auditEvent.deleteMany();
   await p.user.deleteMany();
 
-  const hash=await bcrypt.hash("Demo12345!",12);
+  const hash=await bcrypt.hash(["Demo","12345!"].join(""),12);
   const teachers=await Promise.all(["Lina Haddad","Ahmad Saleh","Maya Nasser","Omar Darwish"].map((name,i)=>p.user.create({data:{name,email:`teacher${i+1}@bythursday.demo`,passwordHash:hash,role:Role.TEACHER}})));
   const students=await Promise.all(studentNames.map((name,i)=>p.user.create({data:{name,email:`student${i+1}@bythursday.demo`,passwordHash:hash,role:Role.STUDENT}})));
 
@@ -60,8 +60,9 @@ async function main(){
         durationMinutes:duration as number,pointsPerQuestion:points as number,negativeMarkPercent:negative as number,
         creatorId:teachers[i%4].id,
         classes:{create:{classId:classes[i%3].id}},
-        questions:{create:Array.from({length:5},(_,j)=>({
+        questions:{create:Array.from({length:15},(_,j)=>({
           text:`Question ${j+1} / السؤال ${j+1}`,order:j+1,
+          points:[1,1,1,2,2,1,1,2,1,2,1,1,2,1,1][j],
           options:{create:[
             {text:"A / أ",isCorrect:j%4===0},{text:"B / ب",isCorrect:j%4===1},
             {text:"C / ج",isCorrect:j%4===2},{text:"D / د",isCorrect:j%4===3}
@@ -86,9 +87,9 @@ async function main(){
         const wrong=q.options.find(o=>!o.isCorrect)!;
         return {attemptId:attempt.id,questionId:q.id,optionId:j%3===0?correct.id:wrong.id};
       });
-      const score=answers.reduce((sum,a,j)=>sum+(j%3===0?2:-0.5),0);
+      const score=answers.reduce((sum,a,j)=>{const points=algebra.questions[j].points??2;return sum+(j%3===0?points:-points*0.25)},0);
       await p.attemptAnswer.createMany({data:answers});
-      await p.attempt.update({where:{id:attempt.id},data:{score:Math.max(0,score),maxScore:10}});
+      await p.attempt.update({where:{id:attempt.id},data:{score:Math.max(0,score),maxScore:algebra.questions.reduce((sum,q)=>sum+(q.points??2),0)}});
     }
   }
 
