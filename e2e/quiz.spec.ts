@@ -33,6 +33,7 @@ test("student can exit, resume, and restore an autosaved answer",async({page})=>
   const first=page.locator('input[type="radio"]').first();
   await first.check();
   await expect(page.getByText("Answers saved",{exact:true})).toBeVisible({timeout:5000});
+  page.once("dialog",async dialog=>{await dialog.accept()});
   await page.getByRole("button",{name:"Exit quiz"}).click();
   await expect(page).toHaveURL(/\/dashboard/);
   await page.getByRole("link",{name:"Open quiz"}).first().click();
@@ -49,8 +50,10 @@ test("quiz navigation warns before leaving an active attempt",async({page})=>{
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
   let dialogSeen=false;
   page.on("dialog",async dialog=>{dialogSeen=true;await dialog.dismiss()});
+  await page.evaluate(()=>window.history.pushState({e2eGuard:true},"",window.location.href));
   await page.goBack();
   await expect.poll(()=>dialogSeen).toBeTruthy();
+  await expect(page).toHaveURL(/\/quiz\//);
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
 });
 
@@ -98,6 +101,8 @@ test("student sees reconnect state during a network interruption",async({page,co
   await page.getByRole("link",{name:"Open quiz"}).first().click();
   await expect(page.getByRole("heading",{name:"Algebra | الجبر"})).toBeVisible();
   await context.setOffline(true);
+  await page.evaluate(()=>window.dispatchEvent(new Event("offline")));
   await expect(page.getByText("You are offline.",{exact:false})).toBeVisible({timeout:3000});
   await context.setOffline(false);
+  await page.evaluate(()=>window.dispatchEvent(new Event("online")));
 });
